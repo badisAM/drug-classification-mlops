@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titre }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            overflow: hidden;
+            width: 100%;
+            max-width: 600px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .prediction-box {
+            background: #e8f5e9;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+            border: 3px solid #4CAF50;
+        }
+        
+        .prediction-label {
+            font-size: 1.2rem;
+            color: #2E7D32;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .prediction-value {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #2E7D32;
+            margin: 15px 0;
+        }
+        
+        .confidence {
+            font-size: 1.1rem;
+            color: #666;
+            margin-top: 10px;
+        }
+        
+        .patient-info {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .patient-info h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .info-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-size: 1.1rem;
+            color: #333;
+        }
+        
+        .probabilities {
+            margin-bottom: 30px;
+        }
+        
+        .probabilities h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .prob-bar {
+            margin-bottom: 15px;
+        }
+        
+        .prob-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+        }
+        
+        .prob-name {
+            font-weight: 600;
+        }
+        
+        .prob-percent {
+            color: #2E7D32;
+            font-weight: bold;
+        }
+        
+        .bar-container {
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #2E7D32);
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #333;
+            border: 2px solid #ddd;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✅ Prédiction Réussie</h1>
+            <p>Résultat de l'analyse des données médicales</p>
+        </div>
+        
+        <div class="content">
+            <div class="prediction-box">
+                <div class="prediction-label">MÉDICAMENT RECOMMANDÉ</div>
+                <div class="prediction-value">{{ prediction }}</div>
+                <div class="confidence">Confiance: {{ "%.1f"|format(confidence) }}%</div>
+            </div>
+            
+            <div class="patient-info">
+                <h3>📋 INFORMATIONS DU PATIENT</h3>
+                <div class="info-grid">
+                    {% for key, value in patient.items() %}
+                    <div class="info-item">
+                        <div class="info-label">{{ key }}</div>
+                        <div class="info-value">{{ value }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            {% if probabilites %}
+            <div class="probabilities">
+                <h3>📊 PROBABILITÉS DES MÉDICAMENTS</h3>
+                {% for medicament, prob in probabilites.items() %}
+                <div class="prob-bar">
+                    <div class="prob-label">
+                        <span class="prob-name">{{ medicament }}</span>
+                        <span class="prob-percent">{{ prob }}</span>
+                    </div>
+                    <div class="bar-container">
+                        {% set prob_num = prob|replace('%', '')|float %}
+                        <div class="bar-fill" style="width: {{ prob_num }}%"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <div class="actions">
+                <a href="/" class="btn btn-secondary">← Nouvelle Prédiction</a>
+                <a href="/docs" class="btn btn-primary">📚 Documentation API</a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            Projet ML - Classification de Médicaments | FastAPI & Scikit-learn
+        </div>
+    </div>
+</body>
+</html>
